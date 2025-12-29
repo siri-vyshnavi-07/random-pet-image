@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Pet Image</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+  select, button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+  }
+  img {
+    margin-top: 20px;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+  }
+</style>
+</head>
+<body>
+
+<h1>Random Dog/Cat Image Viewer</h1>
+
+<select id="pet">
+  <option value="dog">Dog</option>
+  <option value="cat">Cat</option>
+</select>
+<button id="getImage">Get Random Image</button>
+
+<div>
+  <img id="petImage" src="" alt="Your pet will appear here">
+</div>
+
+<script>
+  const button = document.getElementById('getImage');
+  const petSelect = document.getElementById('pet');
+  const petImage = document.getElementById('petImage');
+
+  button.addEventListener('click', () => {
+    const pet = petSelect.value;
+    let apiUrl = '';
+
+    if(pet === 'dog') {
+      apiUrl = 'https://dog.ceo/api/breeds/image/random';
+    } else {
+      apiUrl = 'https://api.thecatapi.com/v1/images/search';
+    }
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        if(pet === 'dog') {
+          petImage.src = data.message;
+        } else {
+          petImage.src = data[0].url;
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching image:', err);
+        alert('Could not fetch image. Try again!');
+      });
+  });
+</script>
+
+</body>
+</html>
